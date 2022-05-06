@@ -12,6 +12,7 @@ import com.mygdx.game.screens.MainMenuScreen;
 public class MyGdxGame extends Game {
 	public SpriteBatch batch;
 	public BitmapFont font;
+	public BitmapFont font1;
 
 
 
@@ -22,9 +23,14 @@ public class MyGdxGame extends Game {
 		batch = new SpriteBatch();
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("my_font.ttf"));
 		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+		FreeTypeFontGenerator.FreeTypeFontParameter parameter1 = new FreeTypeFontGenerator.FreeTypeFontParameter();
+		parameter1.size=76;
+		parameter1.color = Color.BLACK;
 		parameter.size=82;
 		parameter.color = Color.MAGENTA;
 		font = generator.generateFont(parameter);
+		font1 = generator.generateFont(parameter1);
+
 
 
 

@@ -6,20 +6,21 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+
 import com.mygdx.game.MyGdxGame;
 
 public class Player extends Actor implements Car {
     private int x;
     private final int y;
     private final double width;
-    private final Texture texture;
+    private Texture texture;
+    private String texturePath;
     boolean gameOn=true;
-    private int coin;
+    public long coin;
     private int x1;
     private boolean xin;
     private EnemyCar[] enemyCars;
     private boolean crashed=false;
-
     public boolean isCrashed() {
         return crashed;
     }
@@ -30,11 +31,20 @@ public class Player extends Actor implements Car {
 
     Rectangle bounds;
 
+    public void setTexturePath(String texturePath) {
+        this.texturePath = texturePath;
+    }
+
+    public String getTexturePath() {
+        return texturePath;
+    }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
         batch.draw(texture, x, y, Gdx.graphics.getWidth()/7, Gdx.graphics.getHeight()/7);
     }
+
+
 
     public boolean isGameOn() {
         return gameOn;
@@ -48,13 +58,14 @@ public class Player extends Actor implements Car {
         this.enemyCars = enemyCars;
     }
 
-    public Player(int x, int y, int speed, int height, int width, Texture texture) {
+    public Player(int x, int y, int speed, int height, int width, String texture, int coin) {
         this.x = x;
         this.y = y;
         this.width = width;
-        this.texture = texture;
-
+        this.texturePath = texture;
+        this.texture = new Texture(Gdx.files.internal(texture));
         this.bounds = new Rectangle(x, y, Gdx.graphics.getWidth()/7, Gdx.graphics.getHeight()/7);
+        this.coin = coin;
     }
 
     public float getX() {
@@ -65,7 +76,9 @@ public class Player extends Actor implements Car {
         return y;
     }
 
-
+    public Texture getTexture() {
+        return texture;
+    }
 
     public void getCars(EnemyCar[] enemyCars){
         this.enemyCars = enemyCars;
@@ -92,6 +105,7 @@ public class Player extends Actor implements Car {
 
     @Override
     public void move(double mc) {
+        coin+=50*mc;
 
         if (xin){
 
@@ -116,5 +130,9 @@ public class Player extends Actor implements Car {
 
         }
 
+    }
+
+    public long getCoin() {
+        return coin;
     }
 }

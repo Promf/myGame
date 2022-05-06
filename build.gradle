@@ -37,6 +37,7 @@ allprojects {
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
         maven { url "https://jitpack.io" }
+
     }
 }
 
@@ -71,6 +72,7 @@ project(":android") {
         api "com.badlogicgames.ashley:ashley:$ashleyVersion"
 
 
+
     }
 }
 
@@ -85,7 +87,7 @@ project(":core") {
         api "com.badlogicgames.gdx-controllers:gdx-controllers-core:$gdxControllersVersion"
         api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
         api "com.badlogicgames.ashley:ashley:$ashleyVersion"
-        implementation 'com.esotericsoftware:kryo:5.3.0'
+        api 'com.esotericsoftware.kryo:kryo5:5.3.0'
 
 
     }

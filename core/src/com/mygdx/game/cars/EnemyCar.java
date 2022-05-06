@@ -8,7 +8,12 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Random;
+import java.util.Scanner;
+import java.util.Stack;
+import java.util.TreeSet;
 
 public class EnemyCar extends Actor implements Car
         {
@@ -20,9 +25,9 @@ public class EnemyCar extends Actor implements Car
             private int height = Gdx.graphics.getHeight();
             private int width = Gdx.graphics.getWidth();
             Random rand = new Random();
-            double[] speeds = new double[]{height/3f, height/4f, height/7f, height/5f};
+            double[] speeds = new double[]{height/6.5f, height/6f, height/7f, height/7.5f};
             int[] position_x = new int[]{width/3-width/7, (int) (width*0.45), width-width/3};
-            int[] position_y = new int[]{height+height/7, height+height/2, 2*height+height/3, height+height/7, height+height/2, 2*height+height/3};
+            int[] position_y = new int[]{height+height/2+ height/3, height+height , 2*height+ height/7, height+height/2+ height/3, height+height , 2*height+ height};
             private Rectangle rectangle;
             private boolean crash=false;
             private final int num;
@@ -31,6 +36,13 @@ public class EnemyCar extends Actor implements Car
             private EnemyCar[] enemyCars;
             private int positionI;
             private int positionXI;
+
+
+            @Override
+            public void setY(float y) {
+                super.setY(y);
+            }
+
 
 
             public EnemyCar(Texture texture, int x, int y, double speed, int num){
@@ -42,6 +54,9 @@ public class EnemyCar extends Actor implements Car
                 this.rectangle = new Rectangle(getX(), getY(), Gdx.graphics.getWidth()/7, Gdx.graphics.getHeight()/7);
                 this.positionI=num-1;
                 this.positionXI = Math.abs(num-3);
+                if (positionXI==3){
+                    positionXI=0;
+                }
 
             }
 
@@ -105,22 +120,20 @@ public class EnemyCar extends Actor implements Car
             }
 
 
-
+            @Override
             public float getX() {
-                return (float) x;
+                return x;
             }
 
-            public void setX(int x) {
-                this.x = x;
-            }
 
+
+            @Override
             public float getY() {
-                return (float) y;
+                return y;
             }
 
-            public void setY(int y) {
-                this.y = y;
-            }
+
+
             public int getNum(){return num;}
 
             void randMove(){
@@ -147,10 +160,10 @@ public class EnemyCar extends Actor implements Car
             }
 
             void columnSet(){
-                if (getX() < position_x[0]){
+                if (getX() <= position_x[0]){
                     setColumn(1);
                 }
-                else if (getX() < position_x[1] && getX() >= position_x[0]){
+                else if (getX() <= position_x[1] && getX() > position_x[0]){
                     setColumn(2);
                 }
                 else{
@@ -164,27 +177,36 @@ public class EnemyCar extends Actor implements Car
             }
 
             void outTheWorld(){
-                if (getY() < -height / 7f){
-                    if (positionI>5){
-                        positionI = 0;
+
+
+                if (y < -height / 7f){
+
+                    float z=0;
+                    for (EnemyCar car:enemyCars){
+                        float i = car.getY();
+                        if (z<i){
+                            z=i;
+                        }
                     }
-                    if (positionXI>2){
-                        positionXI=0;
-                    }
+
                     speed = speeds[rand.nextInt(4)];
                     setX(position_x[positionXI]);
-                    setY(position_y[positionI]);
+                    y = z+height/2;
                     setState(State.STATE_MOVING);
                     setCrash(false);
 
 
+                    //YOUR CODE will be placed HERE
                 }
+
+
+
             }
 
             void moveRight(double mc){
                 if (getColumn()!=3){
                     if (getTemp_column()==getColumn()) {
-                        setX((int) (getX() + width/300*mc));
+                        x += width/3f*mc;
                     }
                     else {
                         setState(State.STATE_MOVING);
@@ -196,7 +218,7 @@ public class EnemyCar extends Actor implements Car
             void moveLeft(double mc){
                 if (getColumn()!=1){
                     if (getTemp_column()==getColumn()) {
-                        setX((int) (getX() - width/300*mc));
+                        x -= width/3f*mc;
                     }
                     else {
                         setState(State.STATE_MOVING);
@@ -213,7 +235,7 @@ public class EnemyCar extends Actor implements Car
                 switch (getState()){
                     case STATE_MOVING:
                         randMove();
-                        setY((int) (getY()-speed*mc));
+                        y -= speed*mc;
                         collision();
                         crashAvoid();
                         outTheWorld();
@@ -222,7 +244,7 @@ public class EnemyCar extends Actor implements Car
 
                     case STATE_CHANGING:
                         columnSet();
-                        setY((int) (getY()-speed*mc));
+                        y -= speed*mc;
                         collision();
                         crashAvoid();
                         if (!crash){
@@ -240,7 +262,7 @@ public class EnemyCar extends Actor implements Car
                         break;
 
                     case STATE_CRASHED:
-                        setY((int) (getY()-Gdx.graphics.getHeight()/2f*mc));
+                        y -= Gdx.graphics.getHeight()/2f*mc;
                         outTheWorld();
                         break;
                 }
@@ -260,8 +282,8 @@ public class EnemyCar extends Actor implements Car
 
                             break;
                         }
-                        speed += 5;
-                        car.speed -=5;
+                        speed += 2;
+                        car.speed -=2;
                         if (getColumn()==1){
                             setState(State.STATE_CHANGING);
                             setVector(Vector.RIGHT);
@@ -289,7 +311,7 @@ public class EnemyCar extends Actor implements Car
                 rectangle.set(x, y, Gdx.graphics.getWidth()/7f, Gdx.graphics.getHeight()/7f);
                 for (EnemyCar car: enemyCars) {
                     if (rectangle.overlaps(car.getBounds()) && car.num!= num) {
-                        setCrash(false);
+                        setCrash(true);
                         setState(State.STATE_CRASHED);
                     }
 
@@ -299,5 +321,7 @@ public class EnemyCar extends Actor implements Car
             public void draw(Batch batch, float x) {
                 batch.draw(this.texture, (int)getX(), (int)getY(), Gdx.graphics.getWidth()/7f, Gdx.graphics.getHeight()/7f);
             }
+
+
 
         }

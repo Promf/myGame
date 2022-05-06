@@ -7,12 +7,14 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryo.io.Output;
+
+import com.esotericsoftware.kryo.kryo5.Kryo;
+import com.esotericsoftware.kryo.kryo5.io.Output;
 import com.mygdx.game.Background;
 import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.cars.EnemyCar;
 import com.mygdx.game.cars.Player;
+import com.mygdx.game.serialize.PlayerSerialize;
 
 import java.io.FileOutputStream;
 
@@ -31,7 +33,7 @@ public class GameScreen implements Screen {
 
 
 
-    public GameScreen(final MyGdxGame game, EnemyCar car1, EnemyCar car2, Player player) {
+    public GameScreen(final MyGdxGame game, EnemyCar car1, EnemyCar car2, EnemyCar car3, Player player) {
 
         this.game = game;
 
@@ -40,9 +42,9 @@ public class GameScreen implements Screen {
 
 
         fon = new Texture(Gdx.files.internal("fon.jpg"));
+        Texture tree = new Texture(Gdx.files.internal("data/tree.png"));
 
-
-        this.background = new Background(fon, 0, 0, width, height);
+        this.background = new Background(fon, tree);
 
         this.playerCar = player;
 
@@ -56,14 +58,15 @@ public class GameScreen implements Screen {
         int width =Gdx.graphics.getWidth();
         int[] position_x = new int[]{width/3-width/7, (int) (width*0.45), width-width/3};
 
-        int[] position_y = new int[]{height+height/7, height+height/2+height/7, 2*height, height+height/7, height+height/2+height/7, 2*height+height/3};
+        int i = height + height / 2 + height / 7 + height / 7;
+        int[] position_y = new int[]{2*height+height/7, height+height/2+height/7, 2*height+height/3};
 
 
 
-        EnemyCar car3 = new EnemyCar(carTexture3, (int) position_x[0], position_y[2], 225, 3 );
-        EnemyCar car4 = new EnemyCar(carTexture4, (int)position_x[1], position_y[0]+height, 125, 4 );
-        EnemyCar car5 = new EnemyCar(carTexture5, (int) position_x[2], position_y[1]+height, 175, 5 );
-        EnemyCar car6 = new EnemyCar(carTexture6, (int) position_x[0], position_y[2]+height, 275, 6 );
+
+        EnemyCar car4 = new EnemyCar(carTexture4, (int)position_x[1], position_y[1], 225, 4 );
+        EnemyCar car5 = new EnemyCar(carTexture5, (int) position_x[2], position_y[1]+height/2, 175, 5 );
+        EnemyCar car6 = new EnemyCar(carTexture6, (int) position_x[0], position_y[1]+2*height/2, 200, 6 );
 
         enemyCars = new EnemyCar[]{car1, car2, car3, car4, car5, car6};
         playerCar.setEnemyCars(enemyCars);
@@ -102,7 +105,7 @@ public class GameScreen implements Screen {
         ScreenUtils.clear(0, 0, 0.2f, 1);
         if (!gameOn){
             mainMusic.stop();
-            game.setScreen(new MainMenuScreen(game));
+
             stage.dispose();
             mainMusic.dispose();
             fon.dispose();
@@ -111,6 +114,7 @@ public class GameScreen implements Screen {
             carTexture5.dispose();
             carTexture6.dispose();
             dispose();
+            game.setScreen(new MainMenuScreen(game));
 
 
 
@@ -149,8 +153,10 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         Kryo kryo = new Kryo();
+        kryo.register(Player.class, new PlayerSerialize());
+
         try {
-            Output output = new Output(new FileOutputStream(Gdx.files.getLocalStoragePath () + "/" + "saves.bin"));
+            Output output = new Output(new FileOutputStream(Gdx.files.getLocalStoragePath()+"/"+"save.txt"));
             // serialize object to file
             kryo.writeObject(output, playerCar);
             output.close();
