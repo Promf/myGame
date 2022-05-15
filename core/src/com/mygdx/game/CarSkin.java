@@ -4,8 +4,8 @@ import com.badlogic.gdx.graphics.Texture;
 
 public class CarSkin {
     private boolean bought;
-    private int price;
-    private String texture;
+    private final int price;
+    private final String texture;
 
     public CarSkin(boolean bought, int price, String texture) {
         this.bought = bought;
@@ -23,5 +23,9 @@ public class CarSkin {
 
     public String getTexture() {
         return texture;
+    }
+
+    public void setBought(boolean bought) {
+        this.bought = bought;
     }
 }

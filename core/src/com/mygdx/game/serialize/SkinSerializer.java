@@ -10,16 +10,15 @@ import com.mygdx.game.CarSkin;
 public class SkinSerializer extends Serializer<CarSkin> {
     @Override
     public void write(Kryo kryo, Output output, CarSkin skin) {
-        output.writeString(skin.getTexture());
+
         output.writeBoolean(skin.isBought());
         output.writeInt(skin.getPrice(), false);
+        output.writeString(skin.getTexture());
 
     }
 
     @Override
     public CarSkin read(Kryo kryo, Input input, Class<? extends CarSkin> aClass) {
-        String str = input.readString();
-        CarSkin skin = new CarSkin(input.readBoolean(), input.readInt(false), str);
-        return skin;
+        return new CarSkin(input.readBoolean(), input.readInt(false), input.readString());
     }
 }

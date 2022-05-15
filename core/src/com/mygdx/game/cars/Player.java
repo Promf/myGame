@@ -13,13 +13,14 @@ public class Player extends Actor implements Car {
     private int x;
     private final int y;
     private final double width;
-    private Texture texture;
+    private final Texture texture;
     private String texturePath;
     boolean gameOn=true;
     public long coin;
     private int x1;
     private boolean xin;
     private EnemyCar[] enemyCars;
+    private double speed= Gdx.graphics.getWidth()/1.5;
     private boolean crashed=false;
     public boolean isCrashed() {
         return crashed;
@@ -102,19 +103,22 @@ public class Player extends Actor implements Car {
      this.xin = xin;
     }
 
+    public void moveUp(){
+        speed+=20;
+    }
+
 
     @Override
     public void move(double mc) {
         coin+=50*mc;
-
         if (xin){
 
 
             if (width/2 < x1 && getX() < width/1.5) {
-                setX((int) (getX()+width/1.5*mc));
+                setX((int) (getX()+speed*mc));
             }
             else if (width/2 > x1 && getX() > width/7){
-                setX((int) (getX()-width/1.5*mc));
+                setX((int) (getX()-speed*mc));
             }
         }
 

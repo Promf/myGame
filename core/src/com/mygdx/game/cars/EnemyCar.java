@@ -199,8 +199,6 @@ public class EnemyCar extends Actor implements Car
                     //YOUR CODE will be placed HERE
                 }
 
-
-
             }
 
             void moveRight(double mc){

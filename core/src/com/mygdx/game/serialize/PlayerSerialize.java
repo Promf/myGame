@@ -18,13 +18,10 @@ public class PlayerSerialize extends Serializer<Player> {
         output.writeInt((int)object.coin, false);
         String str = object.getTexturePath();
         output.writeString(str);
-
     }
 
     @Override
     public Player read(Kryo kryo, Input input, Class<? extends Player> aClass) {
-
-
         long i = input.readInt(false);
         String str = input.readString();
         Player player = new Player((int) (Gdx.graphics.getWidth()*0.45), (int) (Gdx.graphics.getHeight()/3.5), 399, 499, Gdx.graphics.getWidth(), str, (int) i);

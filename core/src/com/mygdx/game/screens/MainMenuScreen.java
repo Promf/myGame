@@ -39,7 +39,7 @@ public class MainMenuScreen implements Screen {
     private ImageButton imageMusicButton;
     private TextButton startButton;
     private ImageButton imageMapButton;
-    private Texture playerTexture;
+
 
 
     public MainMenuScreen(final MyGdxGame game) {
@@ -137,7 +137,7 @@ public class MainMenuScreen implements Screen {
         imageShopButton.addListener(new ClickListener(){
 
             public void clicked(InputEvent event, float x, float y){
-                game.setScreen(new Shop(game));
+                game.setScreen(new Shop(game, player));
 
             }
         });
