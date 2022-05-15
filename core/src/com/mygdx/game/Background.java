@@ -26,9 +26,9 @@ public class Background extends Actor {
 
         this.y = Gdx.graphics.getHeight();
         this.y1=0;
-        this.treeY= Gdx.graphics.getHeight()/10f;
-        treeY1 = Gdx.graphics.getHeight()/2f;
-        treeY2 = Gdx.graphics.getHeight();
+        this.treeY= Gdx.graphics.getHeight()/3f;
+        treeY2 = Gdx.graphics.getHeight()/2f+Gdx.graphics.getWidth()/6f;
+        treeY1 = Gdx.graphics.getHeight();
 
 
     }
@@ -63,14 +63,14 @@ public class Background extends Actor {
         if (y <= -Gdx.graphics.getHeight()){
             y = y1 + Gdx.graphics.getHeight();
         }
-        if (treeY<=0){
-            treeY = Gdx.graphics.getHeight()+Gdx.graphics.getHeight()/8f;
+        if (treeY<=-Gdx.graphics.getWidth()/6f){
+            treeY = Gdx.graphics.getHeight()+Gdx.graphics.getWidth()/6f;
         }
-        if (treeY1<=0){
-            treeY1 = Gdx.graphics.getHeight()+Gdx.graphics.getHeight()/8f;
+        if (treeY1<=-Gdx.graphics.getWidth()/6f){
+            treeY1 = Gdx.graphics.getHeight()+Gdx.graphics.getWidth()/6f;
         }
-        if (treeY2<=0){
-            treeY2 = Gdx.graphics.getHeight()+Gdx.graphics.getHeight()/8f;
+        if (treeY2<=-Gdx.graphics.getWidth()/6f){
+            treeY2 = Gdx.graphics.getHeight()+Gdx.graphics.getWidth()/6f;
         }
 
 

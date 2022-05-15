@@ -26,19 +26,28 @@ import java.io.FileNotFoundException;
 import java.util.Random;
 
 public class MainMenuScreen implements Screen {
-    private MyGdxGame game;
-    private Stage stage;
-    private Texture fon;
-    private Texture car1, car2, car3;
-    private EnemyCar enemyCar1;
-    private EnemyCar enemyCar2;
-    private EnemyCar enemyCar3;
+    private final MyGdxGame game;
+    private final Stage stage;
+    private final Texture fon;
+    private final Texture car1;
+    private final Texture car2;
+    private final Texture car3;
+    private final EnemyCar enemyCar1;
+    private final EnemyCar enemyCar2;
+    private final EnemyCar enemyCar3;
     private Player player;
-    private ImageButton imageShopButton;
-    private ImageButton imagePrefButton;
-    private ImageButton imageMusicButton;
-    private TextButton startButton;
-    private ImageButton imageMapButton;
+    private final ImageButton imageShopButton;
+    private final ImageButton imagePrefButton;
+    private final ImageButton imageMusicButton;
+    private final TextButton startButton;
+    private final ImageButton imageMapButton;
+    private final Texture treeTexture;
+    private final Texture shopTexture;
+    private final Texture shopTextureClicked;
+    private final Texture prefTexture;
+    private final Texture musicTexture;
+    private final Texture mapTexture;
+    private final Texture mapChoosen;
 
 
 
@@ -63,8 +72,8 @@ public class MainMenuScreen implements Screen {
         this.stage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 
         this.fon = new Texture(Gdx.files.internal("fon.jpg"));
-        Texture tree = new Texture(Gdx.files.internal("data/tree.png"));
-        Background background = new Background(fon, tree);
+        this. treeTexture = new Texture(Gdx.files.internal("data/tree.png"));
+        Background background = new Background(fon, treeTexture);
         stage.addActor(background);
         Random random = new Random();
 
@@ -80,9 +89,9 @@ public class MainMenuScreen implements Screen {
 
 
 
-        this.enemyCar1 = new EnemyCar(car1, (int) position_x[random.nextInt(3)], position_y[0], 150, 1);
-        this.enemyCar2 = new EnemyCar(car2, (int) position_x[random.nextInt(3)], position_y[1], 200, 2);
-        this.enemyCar3 = new EnemyCar(car3, (int) position_x[random.nextInt(3)], position_y[2], 175, 3);
+        this.enemyCar1 = new EnemyCar(car1, position_x[random.nextInt(3)], position_y[0], 150, 1);
+        this.enemyCar2 = new EnemyCar(car2, position_x[random.nextInt(3)], position_y[1], 200, 2);
+        this.enemyCar3 = new EnemyCar(car3, position_x[random.nextInt(3)], position_y[2], 175, 3);
 
 
         stage.addActor(this.enemyCar1);
@@ -93,21 +102,27 @@ public class MainMenuScreen implements Screen {
 
         Gdx.input.setInputProcessor(stage);
 
-        Texture shopTexture = new Texture(Gdx.files.internal("garage.png"));
+        this.shopTexture = new Texture(Gdx.files.internal("garage.png"));
         TextureRegion shopRegion = new TextureRegion(shopTexture);
         TextureRegionDrawable regionDrawable = new TextureRegionDrawable(shopRegion);
-        TextureRegionDrawable shop = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("garage_chosen.png"))));
+
+        this.shopTextureClicked = new Texture(Gdx.files.internal("garage_chosen.png"));
+        TextureRegionDrawable shop = new TextureRegionDrawable(new TextureRegion(shopTextureClicked));
         regionDrawable.setMinSize(Gdx.graphics.getWidth() / 4f, Gdx.graphics.getWidth() / 4f);
         shop.setMinSize(Gdx.graphics.getWidth() / 4f, Gdx.graphics.getWidth() / 4f);
 
-        TextureRegionDrawable pref = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("system.png"))));
+        this.prefTexture = new Texture(Gdx.files.internal("system.png"));
+        TextureRegionDrawable pref = new TextureRegionDrawable(new TextureRegion(prefTexture));
         pref.setMinSize(Gdx.graphics.getWidth() / 4f, Gdx.graphics.getWidth() / 4f);
 
-        TextureRegionDrawable mus = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("music.png"))));
+        this.musicTexture = new Texture(Gdx.files.internal("music.png"));
+        TextureRegionDrawable mus = new TextureRegionDrawable(new TextureRegion(musicTexture));
         mus.setMinSize(Gdx.graphics.getWidth() / 4f, Gdx.graphics.getWidth() / 4f);
 
-        TextureRegionDrawable map = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("map.png"))));
-        TextureRegionDrawable map_pressed = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("map_choosen.png"))));
+        this.mapTexture = new Texture(Gdx.files.internal("map.png"));
+        this.mapChoosen= new Texture(Gdx.files.internal("map_choosen.png"));
+        TextureRegionDrawable map = new TextureRegionDrawable(new TextureRegion(mapTexture));
+        TextureRegionDrawable map_pressed = new TextureRegionDrawable(new TextureRegion(mapChoosen));
         map.setMinSize(Gdx.graphics.getWidth() / 4f, Gdx.graphics.getWidth() / 4f);
         map_pressed.setMinSize(Gdx.graphics.getWidth() / 4f, Gdx.graphics.getWidth() /4f);
 
@@ -200,6 +215,12 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void dispose() {
+        shopTexture.dispose();
+        shopTextureClicked.dispose();
+        prefTexture.dispose();
+        musicTexture.dispose();
+        mapTexture.dispose();
+        mapChoosen.dispose();
 
 
     }

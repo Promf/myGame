@@ -197,6 +197,7 @@ public class Shop implements Screen {
         stage.draw();
         if(Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.BACK)){
             dispose();
+            stage.dispose();
             game.setScreen(new MainMenuScreen(game));
         }
     }
