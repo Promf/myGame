@@ -76,9 +76,9 @@ public class Shop implements Screen {
 
             this.skins[0] = new CarSkin(true, 0, "data/car.png");
             this.skins[1] = new CarSkin(false, 300, "ambulance.png");
-            this.skins[2] = new CarSkin(false, 300, "black_car.png");
-            this.skins[3] = new CarSkin(false, 300, "mini_truck.png");
-            this.skins[4] = new CarSkin(false, 300, "red_car.png");
+            this.skins[2] = new CarSkin(false, 350, "black_car.png");
+            this.skins[3] = new CarSkin(false, 399, "mini_truck.png");
+            this.skins[4] = new CarSkin(false, 999, "red_car.png");
 
         }
 
@@ -100,10 +100,10 @@ public class Shop implements Screen {
         this.imageCoin = new Image();
         imageCoin.setDrawable(new TextureRegionDrawable(new Texture(Gdx.files.internal("coin.png"))));
 
-        Label coins = new Label(player.coin+"", style1);
+        final Label coins = new Label(player.coin+"", style1);
         table.add(imageCoin).height(gameWidth/6).width(gameWidth/6).align(Align.left);
         table.add(coins).align(Align.left);
-        table.row();
+        table.row().height(gameHeight/3);
 
         for (int i = 0; i < skins.length; i++) {
             final int fi = i;
@@ -138,6 +138,7 @@ public class Shop implements Screen {
                             player.coin-=skins[fi].getPrice();
                             skins[fi].setBought(true);
                             button.setText("Purchased");
+                            coins.setText(player.coin+"");
 
                         }
                     }
@@ -146,23 +147,23 @@ public class Shop implements Screen {
             });
             useButton.addListener(new ClickListener(){
                 public void clicked(InputEvent event, float x, float y){
-                    if (player.getTexturePath().equals(skins[fi].getTexture())){
+                    if (skins[fi].isBought()) {
+                        if (player.getTexturePath().equals(skins[fi].getTexture())) {
 
+                        } else {
+                            player.setTexturePath(skins[fi].getTexture());
+
+
+                        }
                     }
-                    else {
-                        player.setTexturePath(skins[fi].getTexture());
-
-
-                    }
-
                 }});
 
-            table.add(image).expandX().left();
+            table.add(image).expandX().left().height(gameHeight/7).width(gameWidth/7);
             table.add(button).expandX().center().align(Align.center);
             table.add(useButton).expandX().right().align(Align.center);
 
 
-            table.row();
+            table.row().height(gameHeight/3);
 
         }
 

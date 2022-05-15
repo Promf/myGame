@@ -11,7 +11,7 @@ import com.mygdx.game.MyGdxGame;
 
 public class Player extends Actor implements Car {
     private int x;
-    private final int y;
+    private int y;
     private final double width;
     private final Texture texture;
     private String texturePath;
@@ -25,6 +25,8 @@ public class Player extends Actor implements Car {
     public boolean isCrashed() {
         return crashed;
     }
+    private boolean moveUpY=false;
+    private boolean moveDownY=false;
 
     public void setCrashed(boolean crashed) {
         this.crashed = crashed;
@@ -104,13 +106,41 @@ public class Player extends Actor implements Car {
     }
 
     public void moveUp(){
-        speed+=20;
+        if (moveDownY) {
+            moveUpY = false;
+            moveDownY = false;
+        }
+        else {
+            moveUpY=true;
+        }
+    }
+
+    public void moveDown(){
+        if(moveUpY) {
+            moveDownY = false;
+            moveUpY = false;
+        }
+        else {
+            moveDownY=true;
+        }
     }
 
 
     @Override
     public void move(double mc) {
-        coin+=50*mc;
+
+        if (moveUpY){
+            if (y>0 && y < Gdx.graphics.getHeight()-Gdx.graphics.getHeight()/7 ){
+                y+=mc*speed/2;
+            }
+        }
+        else if(moveDownY){
+            if (y>0 && y < Gdx.graphics.getHeight()-Gdx.graphics.getHeight()/7 ){
+                y-=mc*speed/2;
+            }
+
+        }
+
         if (xin){
 
 
