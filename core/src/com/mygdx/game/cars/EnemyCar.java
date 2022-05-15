@@ -190,8 +190,8 @@ public class EnemyCar extends Actor implements Car
                     }
 
                     speed = speeds[rand.nextInt(4)];
-                    setX(position_x[rand.nextInt(3)]);
-                    y = z+height/2f;
+                    x = (position_x[positionXI]);
+                    y = z+height/2.5f;
                     setState(State.STATE_MOVING);
                     setCrash(false);
 

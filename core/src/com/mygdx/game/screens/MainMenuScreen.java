@@ -48,6 +48,8 @@ public class MainMenuScreen implements Screen {
     private final Texture musicTexture;
     private final Texture mapTexture;
     private final Texture mapChoosen;
+    private EnemyCar[] enemyCars;
+    private Background background;
 
 
 
@@ -73,7 +75,7 @@ public class MainMenuScreen implements Screen {
 
         this.fon = new Texture(Gdx.files.internal("fon.jpg"));
         this. treeTexture = new Texture(Gdx.files.internal("data/tree.png"));
-        Background background = new Background(fon, treeTexture);
+        this.background = new Background(fon, treeTexture);
         stage.addActor(background);
         Random random = new Random();
 
@@ -92,13 +94,17 @@ public class MainMenuScreen implements Screen {
         this.enemyCar1 = new EnemyCar(car1, position_x[random.nextInt(3)], position_y[0], 150, 1);
         this.enemyCar2 = new EnemyCar(car2, position_x[random.nextInt(3)], position_y[1], 200, 2);
         this.enemyCar3 = new EnemyCar(car3, position_x[random.nextInt(3)], position_y[2], 175, 3);
-        EnemyCar[] enemyCars = new EnemyCar[]{enemyCar1, enemyCar2, enemyCar3};
+        this.enemyCars = new EnemyCar[]{enemyCar1, enemyCar2, enemyCar3};
+
+        for (EnemyCar car: enemyCars){
+            car.setEnemyCars(enemyCars);
+        }
 
 
         stage.addActor(this.enemyCar1);
         stage.addActor(this.enemyCar2);
         stage.addActor(this.enemyCar3);
-        stage.addActor(player);
+
 
 
         Gdx.input.setInputProcessor(stage);
@@ -188,8 +194,10 @@ public class MainMenuScreen implements Screen {
     @Override
     public void render(float delta) {
 
-
-
+        background.update();
+        for (EnemyCar car: enemyCars){
+            car.move(Gdx.graphics.getDeltaTime());
+        }
         stage.draw();
 
     }

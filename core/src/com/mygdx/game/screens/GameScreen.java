@@ -5,8 +5,11 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
@@ -42,7 +45,9 @@ public class GameScreen implements Screen {
     private float period = 1f;
     private int coin=0;
     private int road=0;
-
+    private  Label.LabelStyle style;
+    private Label labelCoin;
+    private Label labelRoad;
 
 
     public GameScreen(final MyGdxGame game, EnemyCar car1, EnemyCar car2, EnemyCar car3, final Player player) {
@@ -72,6 +77,10 @@ public class GameScreen implements Screen {
 
         enemyCars = new EnemyCar[]{car1, car2, car3, car4, car5, car6};
         playerCar.setEnemyCars(enemyCars);
+
+
+
+
 
 
 
@@ -114,6 +123,16 @@ public class GameScreen implements Screen {
         mainMusic = Gdx.audio.newMusic(Gdx.files.internal("paint_it_black.mp3"));
         mainMusic.setLooping(true);
 
+        this.style = new Label.LabelStyle();
+        style.fontColor=Color.BLACK;
+        style.font= game.font;
+        this.labelCoin = new Label(coin+"", style);
+        labelCoin.setPosition(labelCoin.getWidth(), Gdx.graphics.getHeight()-labelCoin.getHeight());
+        this.labelRoad = new Label(road+"", style);
+        labelRoad.setPosition(Gdx.graphics.getWidth()-labelRoad.getWidth()*3, Gdx.graphics.getHeight()-labelCoin.getHeight(), Align.bottomRight);
+        stage.addActor(labelCoin);
+        this.stage.addActor(labelRoad);
+
 
 
 
@@ -142,6 +161,10 @@ public class GameScreen implements Screen {
             timeSeconds-=period;
             coin+=1;
         }
+        labelRoad.setText(road+"");
+        labelCoin.setText(""+ coin);
+
+
 
 
         ScreenUtils.clear(0, 0, 0.2f, 1);
@@ -162,10 +185,7 @@ public class GameScreen implements Screen {
         }
         update(Gdx.input.isTouched(), Gdx.input.getX(), Gdx.input.getY());
         draw();
-        game.batch.begin();
-        game.font.draw(game.batch, coin+"", 0, height);
-        game.font.draw(game.batch, road+"", width-width/4, height);
-        game.batch.end();
+
 
 
 

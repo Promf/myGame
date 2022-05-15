@@ -115,8 +115,9 @@ public class Shop implements Screen {
             if (skins[i].isBought()){
                  button = new TextButton("Purchased", textButtonStyle);
                  if (player.getTexturePath().equals(skins[fi].getTexture())){
-                     useButton = new TextButton("Use", textButtonStyle);
-                     useButton.setColor(Color.GRAY);
+                     useButton = new TextButton("Used", textButtonStyle);
+
+
                  }
                  else {
                      useButton = new TextButton("Use", textButtonStyle);
