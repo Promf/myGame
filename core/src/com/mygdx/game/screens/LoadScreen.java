@@ -29,8 +29,8 @@ public class LoadScreen implements Screen {
         this.game = game;
         this.style = new Label.LabelStyle();
         style.font= game.font;
-        style.fontColor=Color.BLUE;
-        label = new Label("ARSENII STUDIO PRESENTS", style);
+        style.fontColor=Color.WHITE;
+        label = new Label("ARSENII\n STUDIO\n PRESENTS", style);
         label.setPosition(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, Align.center);
         stage.addActor(label);
         Gdx.input.setInputProcessor(stage);
