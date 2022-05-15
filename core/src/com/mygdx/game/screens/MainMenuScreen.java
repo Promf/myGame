@@ -92,6 +92,7 @@ public class MainMenuScreen implements Screen {
         this.enemyCar1 = new EnemyCar(car1, position_x[random.nextInt(3)], position_y[0], 150, 1);
         this.enemyCar2 = new EnemyCar(car2, position_x[random.nextInt(3)], position_y[1], 200, 2);
         this.enemyCar3 = new EnemyCar(car3, position_x[random.nextInt(3)], position_y[2], 175, 3);
+        EnemyCar[] enemyCars = new EnemyCar[]{enemyCar1, enemyCar2, enemyCar3};
 
 
         stage.addActor(this.enemyCar1);

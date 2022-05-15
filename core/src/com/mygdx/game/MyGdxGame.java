@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.mygdx.game.screens.GameScreen;
+import com.mygdx.game.screens.LoadScreen;
 import com.mygdx.game.screens.MainMenuScreen;
 
 public class MyGdxGame extends Game {
@@ -36,7 +37,8 @@ public class MyGdxGame extends Game {
 
 
 
-		this.setScreen(new MainMenuScreen(this));
+
+		this.setScreen(new LoadScreen(this));
 
 
 
