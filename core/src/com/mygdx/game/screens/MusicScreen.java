@@ -89,7 +89,7 @@ public class MusicScreen implements Screen {
 
             table.add(name).left().expandX().colspan(2);
             table.row();
-            table.add(playButton).left();
+            table.add(playButton).left().top();
             table.add(stopButton).left();
             table.row().height(gameHeight/4f);
 

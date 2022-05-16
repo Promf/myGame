@@ -181,6 +181,13 @@ public class MainMenuScreen implements Screen {
             }
         });
 
+        imageMapButton.addListener(new ClickListener(){
+            public void clicked(InputEvent event, float x, float y){
+                game.setScreen(new LevelScreen(game));
+
+            }
+        });
+
 
 
 
