@@ -174,6 +174,13 @@ public class MainMenuScreen implements Screen {
             }
         });
 
+        imageMusicButton.addListener(new ClickListener(){
+            public void clicked(InputEvent event, float x, float y){
+                game.setScreen(new MusicScreen(game));
+
+            }
+        });
+
 
 
 

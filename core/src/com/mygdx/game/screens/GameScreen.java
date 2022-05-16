@@ -29,7 +29,7 @@ public class GameScreen implements Screen {
     private final MyGdxGame game;
     private final Background background;
     private final Texture fon;
-    Music mainMusic;
+
     private final Stage stage;
     private final Player playerCar;
     private final EnemyCar[] enemyCars;
@@ -120,8 +120,7 @@ public class GameScreen implements Screen {
         Gdx.input.setInputProcessor(inputMultiplexer);
 
 
-        mainMusic = Gdx.audio.newMusic(Gdx.files.internal("paint_it_black.mp3"));
-        mainMusic.setLooping(true);
+
 
         this.style = new Label.LabelStyle();
         style.fontColor=Color.BLACK;
@@ -141,7 +140,7 @@ public class GameScreen implements Screen {
 
         @Override
     public void show() {
-        mainMusic.play();
+
 
 
     }
@@ -169,9 +168,9 @@ public class GameScreen implements Screen {
 
         ScreenUtils.clear(0, 0, 0.2f, 1);
         if (!gameOn){
-            mainMusic.stop();
+            
             stage.dispose();
-            mainMusic.dispose();
+
             fon.dispose();
             carTexture3.dispose();
             carTexture4.dispose();

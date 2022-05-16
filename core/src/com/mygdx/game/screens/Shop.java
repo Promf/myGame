@@ -113,9 +113,12 @@ public class Shop implements Screen {
             final TextButton useButton;
 
             if (skins[i].isBought()){
-                 button = new TextButton("Purchased", textButtonStyle);
+                TextButton.TextButtonStyle buttonStyle = new TextButton.TextButtonStyle();
+                buttonStyle.font= game.font;
+                buttonStyle.fontColor=Color.GRAY;
+                button = new TextButton("Purchased", buttonStyle);
                  if (player.getTexturePath().equals(skins[fi].getTexture())){
-                     useButton = new TextButton("Used", textButtonStyle);
+                     useButton = new TextButton("Use", buttonStyle);
 
 
                  }
@@ -153,6 +156,10 @@ public class Shop implements Screen {
 
                         } else {
                             player.setTexturePath(skins[fi].getTexture());
+                            TextButton.TextButtonStyle style2 = new TextButton.TextButtonStyle();
+                            style2.font= game.font;
+                            style2.fontColor=Color.GRAY;
+                            useButton.setStyle(style2);
 
 
                         }
