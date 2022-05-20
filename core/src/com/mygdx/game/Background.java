@@ -11,7 +11,7 @@ public class Background extends Actor {
     private final Texture tree;
 
 
-
+//
     private float y;
     private float y1;
     private float treeY, treeY1, treeY2;
