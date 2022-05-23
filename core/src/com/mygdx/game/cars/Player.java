@@ -14,6 +14,15 @@ public class Player extends Actor implements Car {
     private int y;
     private final double width;
     private final Texture texture;
+
+    public void setLevelResults(int[] levelResults) {
+        this.levelResults = levelResults;
+    }
+
+    public int[] getLevelResults() {
+        return levelResults;
+    }
+
     private String texturePath;
     boolean gameOn=true;
     public long coin;
@@ -27,6 +36,23 @@ public class Player extends Actor implements Car {
     }
     private boolean moveUpY=false;
     private boolean moveDownY=false;
+    private int level=0;
+    private int[] levelResults;
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level=level;
+    }
+
+    public void setResult(int result){
+        levelResults[level]=result;
+    }
+    public int getResult(){
+        return levelResults[level];
+    }
 
     public void setCrashed(boolean crashed) {
         this.crashed = crashed;
@@ -69,6 +95,7 @@ public class Player extends Actor implements Car {
         this.texture = new Texture(Gdx.files.internal(texture));
         this.bounds = new Rectangle(x, y, Gdx.graphics.getWidth()/7, Gdx.graphics.getHeight()/7);
         this.coin = coin;
+        this.levelResults = new int[100];
     }
 
     public float getX() {

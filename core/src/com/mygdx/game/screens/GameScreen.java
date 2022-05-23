@@ -217,6 +217,9 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         playerCar.coin += coin;
+        if (road>playerCar.getResult()) {
+            playerCar.setResult(road);
+        }
         Kryo kryo = new Kryo();
         kryo.register(Player.class, new PlayerSerialize());
 

@@ -78,7 +78,7 @@ public class Shop implements Screen {
             this.skins[1] = new CarSkin(false, 300, "ambulance.png");
             this.skins[2] = new CarSkin(false, 350, "black_car.png");
             this.skins[3] = new CarSkin(false, 399, "mini_truck.png");
-            this.skins[4] = new CarSkin(false, 999, "red_car.png");
+            this.skins[4] = new CarSkin(false, 500, "red_car.png");
 
         }
 
