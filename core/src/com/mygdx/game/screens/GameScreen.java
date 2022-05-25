@@ -1,18 +1,21 @@
 package com.mygdx.game.screens;
 
+import static com.mygdx.game.MyGdxGame.database;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-
 import com.esotericsoftware.kryo.kryo5.Kryo;
 import com.esotericsoftware.kryo.kryo5.io.Output;
 import com.mygdx.game.Background;
@@ -29,7 +32,7 @@ public class GameScreen implements Screen {
     private final MyGdxGame game;
     private final Background background;
     private final Texture fon;
-
+    private ProgressBar bar;
     private final Stage stage;
     private final Player playerCar;
     private final EnemyCar[] enemyCars;
@@ -44,7 +47,7 @@ public class GameScreen implements Screen {
     private float time=0f;
     private float period = 1f;
     private int coin=0;
-    private int road=0;
+    private int road=1;
     private  Label.LabelStyle style;
     private Label labelCoin;
     private Label labelRoad;
@@ -79,7 +82,33 @@ public class GameScreen implements Screen {
         playerCar.setEnemyCars(enemyCars);
 
 
+        Pixmap pixmap = new Pixmap(100,20, Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.RED);
+        pixmap.fill();
+        TextureRegionDrawable reg = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
+        pixmap.dispose();
 
+        ProgressBar.ProgressBarStyle stylepr = new ProgressBar.ProgressBarStyle();
+        stylepr.background= reg;
+
+        Pixmap pixmap1 = new Pixmap(0,20, Pixmap.Format.RGBA8888);
+        pixmap1.setColor(Color.GREEN);
+        pixmap1.fill();
+        TextureRegionDrawable reg1 = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap1)));
+        pixmap1.dispose();
+        stylepr.knob=reg1;
+
+        Pixmap pixmap2 = new Pixmap(100,20, Pixmap.Format.RGBA8888);
+        pixmap2.setColor(Color.GREEN);
+        pixmap2.fill();
+        TextureRegionDrawable reg2 = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap2)));
+        pixmap2.dispose();
+        stylepr.knobBefore=reg2;
+
+
+        this.bar = new ProgressBar(0, 10000, 1, false, stylepr);
+        bar.setPosition(width/2, height-bar.getHeight(), 1);
+        bar.setAnimateDuration(0.25f);
 
 
 
@@ -128,11 +157,10 @@ public class GameScreen implements Screen {
         this.labelCoin = new Label(coin+"", style);
         labelCoin.setPosition(labelCoin.getWidth(), Gdx.graphics.getHeight()-labelCoin.getHeight());
         this.labelRoad = new Label(road+"", style);
-        labelRoad.setPosition(Gdx.graphics.getWidth()-labelRoad.getWidth()*3, Gdx.graphics.getHeight()-labelCoin.getHeight(), Align.bottomRight);
+        labelRoad.setPosition(Gdx.graphics.getWidth()-labelRoad.getWidth()*8, Gdx.graphics.getHeight()-labelCoin.getHeight());
         stage.addActor(labelCoin);
         this.stage.addActor(labelRoad);
-
-
+        stage.addActor(bar);
 
 
     }
@@ -148,8 +176,11 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
 
+
         timeSeconds +=Gdx.graphics.getDeltaTime();
         time += Gdx.graphics.getDeltaTime();
+        bar.setValue(road);
+
 
         if (time>0.02){
             time-=0.02;
@@ -217,6 +248,7 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         playerCar.coin += coin;
+        database.update(playerCar);
         if (road>playerCar.getResult()) {
             playerCar.setResult(road);
         }
@@ -236,6 +268,7 @@ public class GameScreen implements Screen {
     public void draw(){
         background.update();
         stage.draw();
+        stage.act();
     }
     public void update(boolean isTouched, int x, int y){
         if (playerCar.isCrashed()){

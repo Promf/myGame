@@ -1,5 +1,7 @@
 package com.mygdx.game.screens;
 
+import static com.mygdx.game.MyGdxGame.database;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -18,7 +20,6 @@ import com.esotericsoftware.kryo.kryo5.Kryo;
 import com.esotericsoftware.kryo.kryo5.io.Output;
 import com.mygdx.game.GameLevel;
 import com.mygdx.game.MyGdxGame;
-import com.mygdx.game.Song;
 import com.mygdx.game.cars.Player;
 import com.mygdx.game.serialize.PlayerSerialize;
 
@@ -44,10 +45,24 @@ public class LevelScreen implements Screen {
         table = new Table();
         container = new Table();
 
-        GameLevel level1 = new GameLevel("Terrible story", true, 10000, 0);
-        GameLevel level2 = new GameLevel("Escape into Darkness", false, 30000, 10000);
-        GameLevel level3 = new GameLevel("The End", false, 40000, 30000);
-        levels = new GameLevel[]{level1, level2, level3};
+        try {
+            GameLevel level1 = database.select("Terrible story");
+            GameLevel level2 = database.select("Escape into Darkness");
+            GameLevel level3 = database.select("The End");
+            levels = new GameLevel[]{level1, level2, level3};
+        } catch (Exception e) {
+            database.insert("Terrible story", 0, 10000, 1);
+            database.insert("Escape into Darkness", 10000, 20000, 0);
+            database.insert("The End", 20000, 100000, 0);
+            GameLevel level1 = database.select("Terrible story");
+            GameLevel level2 = database.select("Escape into Darkness");
+            GameLevel level3 = database.select("The End");
+            levels = new GameLevel[]{level1, level2, level3};
+            e.printStackTrace();
+        }
+
+
+
         for (int i = 0; i < levels.length; i++) {
             if (player.getLevelResults()[i]!=0){
                 levels[i].setAvailable(true);

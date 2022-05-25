@@ -1,32 +1,28 @@
 package com.mygdx.game.screens;
 
+import static com.mygdx.game.MyGdxGame.database;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.esotericsoftware.kryo.kryo5.Kryo;
 import com.esotericsoftware.kryo.kryo5.io.Input;
 import com.esotericsoftware.kryo.kryo5.io.Output;
 import com.mygdx.game.CarSkin;
 import com.mygdx.game.MyGdxGame;
-
-import com.mygdx.game.cars.Car;
 import com.mygdx.game.cars.Player;
 import com.mygdx.game.serialize.PlayerSerialize;
 import com.mygdx.game.serialize.SkinSerializer;
@@ -140,6 +136,7 @@ public class Shop implements Screen {
                     if (!skins[fi].isBought()){
                         if (skins[fi].getPrice()<=player.coin){
                             player.coin-=skins[fi].getPrice();
+                            database.update(player);
                             skins[fi].setBought(true);
                             button.setText("Purchased");
                             coins.setText(player.coin+"");
@@ -155,7 +152,7 @@ public class Shop implements Screen {
                         if (player.getTexturePath().equals(skins[fi].getTexture())) {
 
                         } else {
-                            player.setTexturePath(skins[fi].getTexture());
+                            database.update(skins[fi].getTexture());
                             TextButton.TextButtonStyle style2 = new TextButton.TextButtonStyle();
                             style2.font= game.font;
                             style2.fontColor=Color.GRAY;
@@ -199,8 +196,6 @@ public class Shop implements Screen {
     @Override
     public void render(float delta) {
         ScreenUtils.clear(255, 255, 255f, 1);
-
-
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
         if(Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.BACK)){

@@ -1,5 +1,7 @@
 package com.mygdx.game.screens;
 
+import static com.mygdx.game.MyGdxGame.database;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
@@ -9,23 +11,17 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-
-import com.esotericsoftware.kryo.kryo5.Kryo;
-import com.esotericsoftware.kryo.kryo5.io.Input;
 import com.mygdx.game.Background;
 import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.cars.EnemyCar;
 import com.mygdx.game.cars.Player;
-import com.mygdx.game.serialize.PlayerSerialize;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.Random;
 
 public class MainMenuScreen implements Screen {
+
     private final MyGdxGame game;
     private final Stage stage;
     private final Texture fon;
@@ -54,8 +50,11 @@ public class MainMenuScreen implements Screen {
 
 
     public MainMenuScreen(final MyGdxGame game) {
+        /*
+    }
         Kryo kryo = new Kryo();
         kryo.register(Player.class, new PlayerSerialize());
+
 
         try {
             Input input = new Input(new FileInputStream(Gdx.files.getLocalStoragePath() + "/" + "save.txt"));
@@ -67,6 +66,15 @@ public class MainMenuScreen implements Screen {
         } catch (FileNotFoundException e) {
 
             this.player = new Player((int) (Gdx.graphics.getWidth() * 0.45), (int) (Gdx.graphics.getHeight() / 3.5), 30, Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), "data/car.png", 1);
+            e.printStackTrace();
+        }
+        */
+        //this.player = new Player((int) (Gdx.graphics.getWidth()*0.45), (int) (Gdx.graphics.getHeight()/3.5), 399, 499, Gdx.graphics.getWidth(), str, (int) i);
+        try {
+            this.player= database.select(1);
+        } catch (Exception e) {
+            database.insert(1, 1, "data/car.png");
+            this.player= database.select(1);
             e.printStackTrace();
         }
 
