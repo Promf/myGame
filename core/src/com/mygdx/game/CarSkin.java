@@ -1,16 +1,27 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.graphics.Texture;
-
 public class CarSkin {
+    private final String name;
+    private final String description;
     private boolean bought;
     private final int price;
+
+    public String getDescription() {
+        return description;
+    }
+
     private final String texture;
 
-    public CarSkin(boolean bought, int price, String texture) {
+    public String getName() {
+        return name;
+    }
+
+    public CarSkin(String name, boolean bought, int price, String texture, String description) {
+        this.name=name;
         this.bought = bought;
         this.price = price;
         this.texture=texture;
+        this.description = description;
     }
 
     public boolean isBought() {

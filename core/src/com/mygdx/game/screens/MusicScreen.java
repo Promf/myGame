@@ -2,13 +2,10 @@ package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -17,42 +14,28 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.esotericsoftware.kryo.kryo5.Kryo;
-import com.esotericsoftware.kryo.kryo5.io.Input;
-import com.mygdx.game.CarSkin;
-
 import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.Song;
-import com.mygdx.game.cars.Player;
-import com.mygdx.game.serialize.SkinSerializer;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 
 public class MusicScreen implements Screen {
-    private ScrollPane scrollPane;
-    private ScrollPane.ScrollPaneStyle style;
 
-    private final Table table;
-    private final Table container;
-    private Song[] music;
     private final Stage stage;
     private final MyGdxGame game;
-    private final int gameWidth= Gdx.graphics.getWidth();
-    private final int gameHeight=Gdx.graphics.getHeight();
 
 
     public MusicScreen(MyGdxGame game) {
         Gdx.input.setCatchKey(com.badlogic.gdx.Input.Keys.BACK, true);
         this.game = game;
+        int gameWidth = Gdx.graphics.getWidth();
+        int gameHeight = Gdx.graphics.getHeight();
         stage = new Stage(new ExtendViewport(gameWidth, gameHeight));
-        table = new Table();
-        container = new Table();
+        Table table = new Table();
+        Table container = new Table();
 
         Song song1 = new Song("music/old_yellow_bricks.mp3", true, "Old Yellow bricks", "Artic Monkeys");
         Song song2 = new Song("music/breaking_the_habits.mp3", false, "Breaking the habits", "Linkin park");
         Song song3 = new Song("music/paint_it_black.mp3", false, "Pait it nlack", "Nlack EE");
-        music = new Song[]{song1, song2, song3};
+        Song[] music = new Song[]{song1, song2, song3};
 
         for (final Song current : music) {
             Label.LabelStyle style = new Label.LabelStyle();
@@ -91,18 +74,18 @@ public class MusicScreen implements Screen {
             table.row();
             table.add(playButton).left().top();
             table.add(stopButton).left();
-            table.row().height(gameHeight/4f);
+            table.row().height(gameHeight /4f);
 
         }
 
 
         Gdx.input.setInputProcessor(stage);
-        style = new ScrollPane.ScrollPaneStyle();
-        scrollPane = new ScrollPane(table, style);
+        ScrollPane.ScrollPaneStyle style2 = new ScrollPane.ScrollPaneStyle();
+        ScrollPane scrollPane = new ScrollPane(table, style2);
         container.background(new TextureRegionDrawable(new Texture(Gdx.files.internal("fon.jpg"))));
         container.add(scrollPane).height(gameHeight).width(gameWidth);
         container.row();
-        container.setBounds(0,0,gameWidth, gameHeight);
+        container.setBounds(0,0, gameWidth, gameHeight);
         stage.addActor(container);
 
     }

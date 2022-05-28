@@ -3,7 +3,6 @@ package com.mygdx.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class Background extends Actor {
@@ -29,26 +28,7 @@ public class Background extends Actor {
         this.treeY= Gdx.graphics.getHeight()/3f;
         treeY2 = Gdx.graphics.getHeight()/2f+Gdx.graphics.getWidth()/6f;
         treeY1 = Gdx.graphics.getHeight();
-
-
     }
-
-
-
-
-
-
-    public double getY1() {
-        return y1;
-    }
-
-    public void setY1(double y1) {
-        this.y1 = (float) y1;
-    }
-
-
-
-
 
     public void update() {
         y -= Gdx.graphics.getHeight()/2f * Gdx.graphics.getDeltaTime();

@@ -22,30 +22,20 @@ import java.util.Random;
 
 public class MainMenuScreen implements Screen {
 
-    private final MyGdxGame game;
     private final Stage stage;
     private final Texture fon;
-    private final Texture car1;
-    private final Texture car2;
-    private final Texture car3;
     private final EnemyCar enemyCar1;
     private final EnemyCar enemyCar2;
     private final EnemyCar enemyCar3;
     private Player player;
-    private final ImageButton imageShopButton;
-    private final ImageButton imagePrefButton;
-    private final ImageButton imageMusicButton;
-    private final TextButton startButton;
-    private final ImageButton imageMapButton;
-    private final Texture treeTexture;
     private final Texture shopTexture;
     private final Texture shopTextureClicked;
     private final Texture prefTexture;
     private final Texture musicTexture;
     private final Texture mapTexture;
     private final Texture mapChoosen;
-    private EnemyCar[] enemyCars;
-    private Background background;
+    private final EnemyCar[] enemyCars;
+    private final Background background;
 
 
 
@@ -78,18 +68,17 @@ public class MainMenuScreen implements Screen {
             e.printStackTrace();
         }
 
-        this.game = game;
         this.stage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 
         this.fon = new Texture(Gdx.files.internal("fon.jpg"));
-        this. treeTexture = new Texture(Gdx.files.internal("data/tree.png"));
+        Texture treeTexture = new Texture(Gdx.files.internal("data/tree.png"));
         this.background = new Background(fon, treeTexture);
         stage.addActor(background);
         Random random = new Random();
 
-        this.car1 = new Texture(Gdx.files.internal("ambulance.png"));
-        this.car2 = new Texture(Gdx.files.internal("black_car.png"));
-        this.car3 = new Texture(Gdx.files.internal("red_car.png"));
+        Texture car1 = new Texture(Gdx.files.internal("ambulance.png"));
+        Texture car2 = new Texture(Gdx.files.internal("black_car.png"));
+        Texture car3 = new Texture(Gdx.files.internal("red_car.png"));
 
         int width = Gdx.graphics.getWidth();
         int height = Gdx.graphics.getHeight();
@@ -146,17 +135,17 @@ public class MainMenuScreen implements Screen {
         textButtonStyle.font = game.font;
 
 
-        this.imageMapButton = new ImageButton(map, map_pressed);
-        this.startButton = new TextButton("Tap to start", textButtonStyle);
-        this.imageShopButton = new ImageButton(regionDrawable, shop);
-        this.imagePrefButton = new ImageButton(pref);
-        this.imageMusicButton = new ImageButton(mus);
+        ImageButton imageMapButton = new ImageButton(map, map_pressed);
+        TextButton startButton = new TextButton("Tap to start", textButtonStyle);
+        ImageButton imageShopButton = new ImageButton(regionDrawable, shop);
+        ImageButton imagePrefButton = new ImageButton(pref);
+        ImageButton imageMusicButton = new ImageButton(mus);
 
         startButton.setPosition(Gdx.graphics.getWidth()/2f, Gdx.graphics.getHeight()/2f, 1);
         imageMusicButton.setPosition(Gdx.graphics.getWidth() - imageMusicButton.getWidth()-height/56f, Gdx.graphics.getHeight() - imageMusicButton.getHeight());
         imageShopButton.setPosition(height/56f, 0);
         imagePrefButton.setPosition(height/56f, Gdx.graphics.getHeight() - imagePrefButton.getHeight());
-        imageMapButton.setPosition(Gdx.graphics.getWidth()/2f-imageMapButton.getWidth()/2, 0);
+        imageMapButton.setPosition(Gdx.graphics.getWidth()/2f- imageMapButton.getWidth()/2, 0);
 
         stage.addActor(imageMapButton);
         stage.addActor(imageShopButton);
@@ -195,12 +184,6 @@ public class MainMenuScreen implements Screen {
 
             }
         });
-
-
-
-
-
-
 
     }
 
@@ -252,8 +235,6 @@ public class MainMenuScreen implements Screen {
         musicTexture.dispose();
         mapTexture.dispose();
         mapChoosen.dispose();
-
-
     }
 
 

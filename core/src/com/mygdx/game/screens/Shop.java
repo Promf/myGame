@@ -18,88 +18,60 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.esotericsoftware.kryo.kryo5.Kryo;
-import com.esotericsoftware.kryo.kryo5.io.Input;
-import com.esotericsoftware.kryo.kryo5.io.Output;
 import com.mygdx.game.CarSkin;
 import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.cars.Player;
-import com.mygdx.game.serialize.PlayerSerialize;
-import com.mygdx.game.serialize.SkinSerializer;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 
 public class Shop implements Screen {
-    private ScrollPane scrollPane;
-    private ScrollPane.ScrollPaneStyle style;
-
-    private final Table table;
-    private final Table container;
-
     private final Stage stage;
     private final MyGdxGame game;
-    private final int gameWidth;
-    private final int gameHeight;
-    private final Player player;
     private final CarSkin[] skins;
-    private Image imageCoin;
-
 
 
     public Shop(final MyGdxGame game, final Player player) {
         Gdx.input.setCatchKey(com.badlogic.gdx.Input.Keys.BACK, true);
         this.game = game;
-        this.player = player;
         skins = new CarSkin[5];
 
-        Kryo kryo=new Kryo();
-        kryo.register(com.mygdx.game.CarSkin.class, new SkinSerializer());
-
         try {
-            Input input = new Input(new FileInputStream(Gdx.files.getLocalStoragePath() + "/" + "skin_save.txt"));
-            // deserialize object from file, in this case LinkedList
             for (int i = 0; i < 5; i++) {
-                this.skins[i] = kryo.readObject(input, CarSkin.class);
+                skins[i] = database.select_skin(i);
             }
 
-            //this.player = new Player((int) (Gdx.graphics.getWidth()*0.45), (int) (Gdx.graphics.getHeight()/3.5), 30,  Gdx.graphics.getHeight(), Gdx.graphics.getWidth(), "data/car.png", 1);
-
-            input.close();
-        } catch (FileNotFoundException e) {
-
-
-            this.skins[0] = new CarSkin(true, 0, "data/car.png");
-            this.skins[1] = new CarSkin(false, 300, "ambulance.png");
-            this.skins[2] = new CarSkin(false, 350, "black_car.png");
-            this.skins[3] = new CarSkin(false, 399, "mini_truck.png");
-            this.skins[4] = new CarSkin(false, 500, "red_car.png");
-
+        } catch (Exception e) {
+            database.insert_skin(0,"ЕЕ мобиль", 99999, "data/car.png", 1, "");
+            database.insert_skin(1,"ЕЕ мобиль", 99999, "data/car.png", 1, "");
+            database.insert_skin(2,"ЕЕ мобиль", 99999, "data/car.png", 1, "");
+            database.insert_skin(3,"ЕЕ мобиль", 99999, "data/car.png", 1, "");
+            database.insert_skin(4,"ЕЕ мобиль", 99999, "data/car.png", 1, "");
+            for (int i = 0; i < 5; i++) {
+                skins[i] = database.select_skin(i);
+            }
+            e.printStackTrace();
         }
 
-        this.gameHeight = Gdx.graphics.getHeight();
-        this.gameWidth = Gdx.graphics.getWidth();
+        int gameHeight = Gdx.graphics.getHeight();
+        int gameWidth = Gdx.graphics.getWidth();
 
         stage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         Gdx.input.setInputProcessor(stage);
 
         ScrollPane.ScrollPaneStyle style = new ScrollPane.ScrollPaneStyle();
 
-        this.container = new Table();
-        this.table = new Table();
+        Table container = new Table();
+        Table table = new Table();
         container.background(new TextureRegionDrawable(new Texture(Gdx.files.internal("fon.jpg"))));
 
         Label.LabelStyle style1 = new Label.LabelStyle(game.font, Color.GOLD);
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
         textButtonStyle.font = game.font;
-        this.imageCoin = new Image();
+        Image imageCoin = new Image();
         imageCoin.setDrawable(new TextureRegionDrawable(new Texture(Gdx.files.internal("coin.png"))));
 
         final Label coins = new Label(player.coin+"", style1);
-        table.add(imageCoin).height(gameWidth/6).width(gameWidth/6).align(Align.left);
+        table.add(imageCoin).height(gameWidth /6f).width(gameWidth /6f).align(Align.left);
         table.add(coins).align(Align.left);
-        table.row().height(gameHeight/3);
+        table.row().height(gameHeight /3f);
 
         for (int i = 0; i < skins.length; i++) {
             final int fi = i;
@@ -107,6 +79,12 @@ public class Shop implements Screen {
             image.setDrawable(new TextureRegionDrawable(new Texture(Gdx.files.internal(skins[i].getTexture()))));
             final TextButton button;
             final TextButton useButton;
+            Label.LabelStyle labelStyle = new Label.LabelStyle();
+            labelStyle.font = game.font;
+            labelStyle.fontColor = Color.BLACK;
+            final Label textName=new Label(skins[fi].getName(), labelStyle);
+            final Label textDescription=new Label(skins[fi].getDescription(), labelStyle);
+            final boolean[] open = {false};
 
             if (skins[i].isBought()){
                 TextButton.TextButtonStyle buttonStyle = new TextButton.TextButtonStyle();
@@ -129,17 +107,18 @@ public class Shop implements Screen {
 
 
 
-
             button.addListener(new ClickListener(){
 
                 public void clicked(InputEvent event, float x, float y){
                     if (!skins[fi].isBought()){
                         if (skins[fi].getPrice()<=player.coin){
                             player.coin-=skins[fi].getPrice();
-                            database.update(player);
+
                             skins[fi].setBought(true);
                             button.setText("Purchased");
                             coins.setText(player.coin+"");
+                            database.update(player);
+                            database.update_skins(skins[fi]);
 
                         }
                     }
@@ -163,19 +142,30 @@ public class Shop implements Screen {
                     }
                 }});
 
-            table.add(image).expandX().left().height(gameHeight/7).width(gameWidth/7);
-            table.add(button).expandX().center().align(Align.center);
-            table.add(useButton).expandX().right().align(Align.center);
+            image.addListener(new ClickListener(){
+                public void clicked(InputEvent event, float x, float y) {
+                    open[0] = !open[0];
+                }
 
 
-            table.row().height(gameHeight/3);
+                });
+
+            table.add(textName).expandX().left().colspan(3);
+            table.row();
+            table.add(image).left().height(gameHeight /7f).width(gameWidth /7f);
+            table.add(button).center().align(Align.center);
+            table.add(useButton).right().align(Align.center);
+            if (open[0]){
+                table.add(textDescription).bottom().left().expandX();
+            }
+            table.row().height(gameHeight /3f);
 
         }
 
-        this.scrollPane=new ScrollPane(table, style);
+        ScrollPane scrollPane = new ScrollPane(table, style);
         container.add(scrollPane).width(gameWidth).height(gameHeight);
         container.row();
-        container.setBounds(0,0,gameWidth, gameHeight);
+        container.setBounds(0,0, gameWidth, gameHeight);
         stage.addActor(container);
 
 
@@ -227,23 +217,7 @@ public class Shop implements Screen {
 
     @Override
     public void dispose() {
-        Kryo kryo = new Kryo();
-        kryo.register(Player.class, new PlayerSerialize());
-        kryo.register(CarSkin.class, new SkinSerializer());
 
-        try {
-            Output output = new Output(new FileOutputStream(Gdx.files.getLocalStoragePath()+"/"+"skin_save.txt"));
-            for (CarSkin skin : skins) {
-                kryo.writeObject(output, skin);
-            }
-            output.close();
-            Output out = new Output(new FileOutputStream(Gdx.files.getLocalStoragePath()+"/"+"save.txt"));
-            kryo.writeObject(out, player);
-            out.close();
-
-        }catch (Exception e){
-            e.printStackTrace();
-        }
 
     }
 }

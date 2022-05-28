@@ -16,23 +16,19 @@ import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.esotericsoftware.kryo.kryo5.Kryo;
-import com.esotericsoftware.kryo.kryo5.io.Output;
 import com.mygdx.game.Background;
 import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.TouchListener;
 import com.mygdx.game.cars.EnemyCar;
 import com.mygdx.game.cars.Player;
-import com.mygdx.game.serialize.PlayerSerialize;
 
-import java.io.FileOutputStream;
 import java.util.Random;
 
 public class GameScreen implements Screen {
     private final MyGdxGame game;
     private final Background background;
     private final Texture fon;
-    private ProgressBar bar;
+    private final ProgressBar bar;
     private final Stage stage;
     private final Player playerCar;
     private final EnemyCar[] enemyCars;
@@ -41,22 +37,20 @@ public class GameScreen implements Screen {
     private final Texture carTexture5;
     private final Texture carTexture6;
     private boolean gameOn=true;
-    private final int width = Gdx.app.getGraphics().getWidth();
-    private final int height = Gdx.app.getGraphics().getHeight();
     private float timeSeconds = 0f;
     private float time=0f;
-    private float period = 1f;
     private int coin=0;
     private int road=1;
-    private  Label.LabelStyle style;
-    private Label labelCoin;
-    private Label labelRoad;
+    private final Label labelCoin;
+    private final Label labelRoad;
 
 
     public GameScreen(final MyGdxGame game, EnemyCar car1, EnemyCar car2, EnemyCar car3, final Player player) {
 
         this.game = game;
-        this.stage = new Stage(new ExtendViewport(width, height));
+        int width1 = Gdx.app.getGraphics().getWidth();
+        int height1 = Gdx.app.getGraphics().getHeight();
+        this.stage = new Stage(new ExtendViewport(width1, height1));
         fon = new Texture(Gdx.files.internal("fon.jpg"));
         Texture tree = new Texture(Gdx.files.internal("data/tree.png"));
         this.background = new Background(fon, tree);
@@ -65,20 +59,21 @@ public class GameScreen implements Screen {
         this.carTexture4 = new Texture(Gdx.files.internal("mini_van.png"));
         this.carTexture5 = new Texture(Gdx.files.internal("red_car.png"));
         this.carTexture6 = new Texture(Gdx.files.internal("taxi.png"));
+        Texture[] textures = new Texture[]{carTexture3, carTexture4, carTexture5, carTexture6};
         int height = Gdx.graphics.getHeight();
         int width =Gdx.graphics.getWidth();
         int[] position_x = new int[]{width/3-width/7, (int) (width*0.45), width-width/3};
         int[] position_y = new int[]{2*height+height/7, height+height/2+height/7, 2*height+height/3};
         Random random = new Random();
+        enemyCars = new EnemyCar[database.select_level(playerCar.getLevel()).getCarsCount()];
+        enemyCars[0]=car1;
+        enemyCars[1]=car2;
+        enemyCars[2]=car3;
+        for (int i = 0; i < database.select_level(playerCar.getLevel()).getCarsCount()-3; i++) {
+            EnemyCar car = new EnemyCar(textures[i], position_x[random.nextInt(2)], position_y[1]+height*i, 225, 4+i );
+            enemyCars[i+3]=car;
+        }
 
-
-
-
-        EnemyCar car4 = new EnemyCar(carTexture4, position_x[random.nextInt(2)], position_y[1], 225, 4 );
-        EnemyCar car5 = new EnemyCar(carTexture5, position_x[random.nextInt(2)], position_y[1]+height/2, 175, 5 );
-        EnemyCar car6 = new EnemyCar(carTexture6, position_x[random.nextInt(2)], position_y[1]+height, 200, 6 );
-
-        enemyCars = new EnemyCar[]{car1, car2, car3, car4, car5, car6};
         playerCar.setEnemyCars(enemyCars);
 
 
@@ -106,8 +101,8 @@ public class GameScreen implements Screen {
         stylepr.knobBefore=reg2;
 
 
-        this.bar = new ProgressBar(0, 10000, 1, false, stylepr);
-        bar.setPosition(width/2, height-bar.getHeight(), 1);
+        this.bar = new ProgressBar(0, database.select_level(playerCar.getLevel()).getGoal(), 1, false, stylepr);
+        bar.setPosition(width/2f, height-bar.getHeight(), 1);
         bar.setAnimateDuration(0.25f);
 
 
@@ -148,10 +143,7 @@ public class GameScreen implements Screen {
         inputMultiplexer.addProcessor(processor1);
         Gdx.input.setInputProcessor(inputMultiplexer);
 
-
-
-
-        this.style = new Label.LabelStyle();
+        Label.LabelStyle style = new Label.LabelStyle();
         style.fontColor=Color.BLACK;
         style.font= game.font;
         this.labelCoin = new Label(coin+"", style);
@@ -161,8 +153,6 @@ public class GameScreen implements Screen {
         stage.addActor(labelCoin);
         this.stage.addActor(labelRoad);
         stage.addActor(bar);
-
-
     }
 
 
@@ -187,8 +177,9 @@ public class GameScreen implements Screen {
             road+=1;
         }
 
+        float period = 1f;
         if(timeSeconds > period){
-            timeSeconds-=period;
+            timeSeconds-= period;
             coin+=1;
         }
         labelRoad.setText(road+"");
@@ -249,20 +240,8 @@ public class GameScreen implements Screen {
     public void dispose() {
         playerCar.coin += coin;
         database.update(playerCar);
-        if (road>playerCar.getResult()) {
-            playerCar.setResult(road);
-        }
-        Kryo kryo = new Kryo();
-        kryo.register(Player.class, new PlayerSerialize());
-
-        try {
-            Output output = new Output(new FileOutputStream(Gdx.files.getLocalStoragePath()+"/"+"save.txt"));
-            // serialize object to file
-            kryo.writeObject(output, playerCar);
-            output.close();
-
-        }catch (Exception e){
-            e.printStackTrace();
+        if (road>database.select_level(playerCar.getLevel()).getRecord()) {
+            database.update(database.select_level(playerCar.getLevel()), road);
         }
     }
     public void draw(){
@@ -272,10 +251,8 @@ public class GameScreen implements Screen {
     }
     public void update(boolean isTouched, int x, int y){
         if (playerCar.isCrashed()){
-
             gameOn=(false);
         }
-
         playerCar.getInfo(x, isTouched);
         playerCar.move(Gdx.graphics.getDeltaTime());
         for (EnemyCar enemyCar : enemyCars) {
