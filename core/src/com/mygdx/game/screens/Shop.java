@@ -128,16 +128,12 @@ public class Shop implements Screen {
             useButton.addListener(new ClickListener(){
                 public void clicked(InputEvent event, float x, float y){
                     if (skins[fi].isBought()) {
-                        if (player.getTexturePath().equals(skins[fi].getTexture())) {
-
-                        } else {
+                        if (!player.getTexturePath().equals(skins[fi].getTexture())) {
                             database.update(skins[fi].getTexture());
                             TextButton.TextButtonStyle style2 = new TextButton.TextButtonStyle();
                             style2.font= game.font;
                             style2.fontColor=Color.GRAY;
                             useButton.setStyle(style2);
-
-
                         }
                     }
                 }});
