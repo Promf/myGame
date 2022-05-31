@@ -37,6 +37,7 @@ public class CutSceneScreen implements Screen {
         scene = scenes[id-1];
         this.plan = gson.fromJson(reader1, CutScenePlan.class);
         stage.addActor(this.reader);
+
     }
 
     @Override
