@@ -20,12 +20,14 @@ import com.mygdx.game.GameLevel;
 import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.cars.Player;
 
+import java.io.FileNotFoundException;
+
 public class LevelScreen implements Screen {
     private final Player player;
     private final Stage stage;
     private final MyGdxGame game;
 
-    public LevelScreen(MyGdxGame game, final Player play) {
+    public LevelScreen(final MyGdxGame game, final Player play) {
         Gdx.input.setCatchKey(com.badlogic.gdx.Input.Keys.BACK, true);
         this.game = game;
         this.player = play;
@@ -80,6 +82,7 @@ public class LevelScreen implements Screen {
 
 
             final TextButton playButton = new TextButton(current.getName(), style1);
+            final TextButton plotButton = new TextButton("Plot", style1);
 
 
             playButton.addListener(new ClickListener() {
@@ -90,15 +93,30 @@ public class LevelScreen implements Screen {
                         label.setText("Need to next: " + current.getGoal() + "\n" + "Your record: " + database.select_level(current.getId()).getRecord());
                         text.setText("Your level:" + (database.select_level(player.getLevel()).getName()));
                     } else if (!current.isAvailable()) {
-                        if (database.select_level(current.getId()).getRecord() >= current.getCost()) {
+                        if (database.select_level(player.getLevel()).getRecord() >= current.getCost()) {
                             current.setAvailable(true);
                             database.update(current);
                             playButton.setStyle(buttonStyle);
                             player.setLevel(current.getId());
                             label.setText("Need to next: " + current.getGoal() + "\n" + "Your record: " + database.select_level(current.getId()).getRecord());
                             text.setText("Your level:" + (database.select_level(player.getLevel()).getName()));
+                            try {
+                                game.setScreen(new CutSceneScreen(game, current.getId()));
+                            } catch (FileNotFoundException e) {
+                                e.printStackTrace();
+                            }
 
                         }
+                    }
+                }
+            });
+
+            plotButton.addListener(new ClickListener() {
+                public void clicked(InputEvent event, float x, float y) {
+                    try {
+                        game.setScreen(new CutSceneScreen(game, current.getId()));
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
                     }
                 }
             });
@@ -107,6 +125,10 @@ public class LevelScreen implements Screen {
             table.add(playButton).expandX().center();
             if (current.isAvailable())
                 table.add(label).expandX().center();
+            if (current.isAvailable()) {
+                table.row();
+                table.add(plotButton).expandX().left();
+            }
             table.row().height(gameHeight / 3f);
         }
 
@@ -117,7 +139,7 @@ public class LevelScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
         ScrollPane.ScrollPaneStyle style2 = new ScrollPane.ScrollPaneStyle();
         ScrollPane scrollPane = new ScrollPane(table, style2);
-        container.background(new TextureRegionDrawable(new Texture(Gdx.files.internal("fon.jpg"))));
+        container.background(new TextureRegionDrawable(new Texture(Gdx.files.internal("backgrounds/fon.jpg"))));
         container.add(scrollPane).height(gameHeight).width(gameWidth);
         container.row();
         container.setBounds(0,0, gameWidth, gameHeight);

@@ -12,14 +12,16 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.mygdx.game.MyGdxGame;
 
+import java.io.FileNotFoundException;
+
 public class LoadScreen implements Screen {
 
     private final Stage stage;
     private final MyGdxGame game;
+    private boolean x;
 
-
-    public LoadScreen (final MyGdxGame game){
-
+    public LoadScreen (final MyGdxGame game, boolean x){
+        this.x=x;
         music = Gdx.audio.newMusic(Gdx.files.internal("music/old_yellow_bricks.mp3"));
 
         this.stage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
@@ -67,8 +69,16 @@ public class LoadScreen implements Screen {
 
     public void render (float delta) {
         if (Gdx.input.isTouched()){
-
-            game.setScreen(new MainMenuScreen(game));
+            if (x){
+                try {
+                    game.setScreen(new CutSceneScreen(game, 1));
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+            else {
+                game.setScreen(new MainMenuScreen(game));
+            }
         }
         ScreenUtils.clear(Color.BLACK);
         stage.draw();

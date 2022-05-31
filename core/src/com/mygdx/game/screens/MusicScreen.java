@@ -82,7 +82,7 @@ public class MusicScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
         ScrollPane.ScrollPaneStyle style2 = new ScrollPane.ScrollPaneStyle();
         ScrollPane scrollPane = new ScrollPane(table, style2);
-        container.background(new TextureRegionDrawable(new Texture(Gdx.files.internal("fon.jpg"))));
+        container.background(new TextureRegionDrawable(new Texture(Gdx.files.internal("backgrounds/fon.jpg"))));
         container.add(scrollPane).height(gameHeight).width(gameWidth);
         container.row();
         container.setBounds(0,0, gameWidth, gameHeight);

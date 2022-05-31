@@ -51,14 +51,14 @@ public class GameScreen implements Screen {
         int width1 = Gdx.app.getGraphics().getWidth();
         int height1 = Gdx.app.getGraphics().getHeight();
         this.stage = new Stage(new ExtendViewport(width1, height1));
-        fon = new Texture(Gdx.files.internal("fon.jpg"));
-        Texture tree = new Texture(Gdx.files.internal("data/tree.png"));
+        fon = new Texture(Gdx.files.internal("backgrounds/fon.jpg"));
+        Texture tree = new Texture(Gdx.files.internal("game_elements/tree.png"));
         this.background = new Background(fon, tree);
         this.playerCar = player;
-        this.carTexture3 = new Texture(Gdx.files.internal("mini_truck.png"));
-        this.carTexture4 = new Texture(Gdx.files.internal("mini_van.png"));
-        this.carTexture5 = new Texture(Gdx.files.internal("red_car.png"));
-        this.carTexture6 = new Texture(Gdx.files.internal("taxi.png"));
+        this.carTexture3 = new Texture(Gdx.files.internal("cars/mini_truck.png"));
+        this.carTexture4 = new Texture(Gdx.files.internal("cars/mini_van.png"));
+        this.carTexture5 = new Texture(Gdx.files.internal("cars/red_car.png"));
+        this.carTexture6 = new Texture(Gdx.files.internal("cars/taxi.png"));
         Texture[] textures = new Texture[]{carTexture3, carTexture4, carTexture5, carTexture6};
         int height = Gdx.graphics.getHeight();
         int width =Gdx.graphics.getWidth();
@@ -258,7 +258,6 @@ public class GameScreen implements Screen {
         for (EnemyCar enemyCar : enemyCars) {
             enemyCar.move(Gdx.graphics.getDeltaTime());
             enemyCar.collision();
-
         }
         playerCar.collision();
 
