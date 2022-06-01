@@ -23,7 +23,6 @@ public class CutSceneScreen implements Screen {
     private final SceneReader reader;
     private final CutScenePlan plan;
 
-
     public CutSceneScreen(MyGdxGame game, int id) throws FileNotFoundException {
         this.stage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         this.game = game;
@@ -37,7 +36,6 @@ public class CutSceneScreen implements Screen {
         scene = scenes[id-1];
         this.plan = gson.fromJson(reader1, CutScenePlan.class);
         stage.addActor(this.reader);
-
     }
 
     @Override
@@ -47,10 +45,8 @@ public class CutSceneScreen implements Screen {
 
     @Override
     public void render(float delta) {
-
         update();
         stage.draw();
-
     }
 
     @Override

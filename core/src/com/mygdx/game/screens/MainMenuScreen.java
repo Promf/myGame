@@ -18,7 +18,6 @@ import com.mygdx.game.MyGdxGame;
 import com.mygdx.game.cars.EnemyCar;
 import com.mygdx.game.cars.Player;
 
-import java.io.FileNotFoundException;
 import java.util.Random;
 
 public class MainMenuScreen implements Screen {
@@ -65,7 +64,7 @@ public class MainMenuScreen implements Screen {
         //this.player = new Player((int) (Gdx.graphics.getWidth()*0.45), (int) (Gdx.graphics.getHeight()/3.5), 399, 499, Gdx.graphics.getWidth(), str, (int) i);
 
         this.player= database.select(1);
-
+        System.out.println(player.getLevel());
 
         this.stage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 

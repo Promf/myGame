@@ -12,7 +12,7 @@ import com.mygdx.game.cars.Player;
 
 public class DataBase implements Database {
     private static final String DATABASE_NAME = "game_data.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 6;
     private static final String TABLE_NAME = "playerInfo";
     private static final String TABLE2_NAME = "Levels";
     private static final String TABLE_SKINS_NAME = "Skins";
@@ -147,7 +147,7 @@ public class DataBase implements Database {
         @SuppressLint("Recycle") Cursor mCursor = mDataBase.query(TABLE_NAME, null, COLUMN_ID + " = ?", new String[]{String.valueOf(id)}, null, null, null);
         mCursor.moveToFirst();
         Player player = new Player((int) (Gdx.graphics.getWidth()*0.45), (int) (Gdx.graphics.getHeight()/3.5), 399, 499, Gdx.graphics.getWidth(), mCursor.getString(NUM_COLUMN_SKIN_PATH), mCursor.getInt(NUM_COLUMN_COINS));
-        player.setLevel(mCursor.getInt(NUM_COLUMN_LEVEL_ID));
+        player.setLevel(mCursor.getInt(NUM_COLUMN_LEVEL));
         return player;
     }
 
