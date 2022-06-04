@@ -110,15 +110,24 @@ public class EnemyCar extends Actor implements Car
                 return y;
             }
 
-            void randMove(){
-                if (rand.nextInt(200)==0 && !isCrash()){
+            public void randMove(){
+                if (rand.nextInt(400)==0 && !isCrash()){
                     setState(State.STATE_CHANGING);
-                    if (rand.nextInt(500)>250){
-                        setVector(Vector.LEFT);
-                    }
-                    else {
+                    if (column==1){
                         setVector(Vector.RIGHT);
                     }
+                    else if (column==2){
+                        if (rand.nextInt(10)>5){
+                            setVector(Vector.LEFT);
+                        } else {
+                            setVector(Vector.RIGHT);
+                        }
+
+                    }
+                    else {
+                        setVector(Vector.LEFT);
+                    }
+
                     setTemp_column(getColumn());
                 }
             }
@@ -128,10 +137,10 @@ public class EnemyCar extends Actor implements Car
             }
 
             void columnSet(){
-                if (getX() <= position_x[0]){
+                if (getX() < position_x[0]){
                     setColumn(1);
                 }
-                else if (getX() <= position_x[1] && getX() > position_x[0]){
+                else if (getX() < position_x[1] && getX() >= position_x[0]){
                     setColumn(2);
                 }
                 else{
@@ -153,7 +162,7 @@ public class EnemyCar extends Actor implements Car
                         }
                     }
                     speed = speeds[rand.nextInt(4)];
-                    x = (position_x[positionXI]);
+                    x = (position_x[positionXI]-1);
                     y = z+height/2.5f;
                     setState(State.STATE_MOVING);
                     setCrash(false);
@@ -239,7 +248,8 @@ public class EnemyCar extends Actor implements Car
 
                         }
                     }
-            }}
+                }
+            }
 
             @Override
             public void collision() {

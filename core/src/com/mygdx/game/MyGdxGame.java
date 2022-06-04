@@ -36,7 +36,7 @@ public class MyGdxGame extends Game {
 			MyGdxGame.database.insert_skin(6,"Taxi Mobile", 2759, "cars/taxi.png", 0, "Become the best taxi in Russia");
 			MyGdxGame.database.insert(1, 1, "cars/car.png");
 			MyGdxGame.database.insert(1, "Terrible story", 0, 5000, 1, 6, "ED");
-			MyGdxGame.database.insert(2, "Escape into Darkness", 5000, 15000, 0, 6, "ef");
+			MyGdxGame.database.insert(2, "Escape", 5000, 15000, 0, 6, "ef");
 			MyGdxGame.database.insert(3, "The End", 15000, 100000, 0, 6, "DF");
 		}
 	}

@@ -54,44 +54,35 @@ public class LevelScreen implements Screen {
             e.printStackTrace();
         }
 
-
-
-
         final Label.LabelStyle styl = new Label.LabelStyle();
         styl.font = game.font;
         styl.fontColor = Color.MAGENTA;
-        final Label text = new Label("Your level:"+(database.select_level(player.getLevel()).getName()), styl);
-        table.add(text).expandX().center();
-        table.row().height(gameHeight /5f);
+        final Label text = new Label("Your level: "+player.getLevel(), styl);
 
 
         for (final GameLevel current : levels) {
-
             Label.LabelStyle style = new Label.LabelStyle();
             style.font = game.font;
-            style.fontColor = Color.MAGENTA;
+            style.fontColor = Color.DARK_GRAY;
             final TextButton.TextButtonStyle buttonStyle = new TextButton.TextButtonStyle();
             buttonStyle.font = game.font;
+            buttonStyle.fontColor=Color.DARK_GRAY;
             buttonStyle.checkedDownFontColor = Color.BLACK;
             TextButton.TextButtonStyle style1 = new TextButton.TextButtonStyle();
             style1.font = game.font;
-            style1.fontColor = Color.DARK_GRAY;
+            style1.fontColor = Color.MAGENTA;
             style1.downFontColor = Color.BLACK;
             final Label label = new Label("Need to next: " + current.getGoal() +
                     "\n" + "Your record: " + current.getRecord(), style);
-
-
-            final TextButton playButton = new TextButton(current.getName(), style1);
-            final TextButton plotButton = new TextButton("Plot", style1);
-
-
+            final TextButton playButton = new TextButton(current.getId()+". "+current.getName(), style1);
+            final TextButton plotButton = new TextButton("Plot", buttonStyle);
             playButton.addListener(new ClickListener() {
                 public void clicked(InputEvent event, float x, float y) {
                     if (current.isAvailable()) {
                         player.setLevel(current.getId());
                         database.update(player);
                         label.setText("Need to next: " + current.getGoal() + "\n" + "Your record: " + database.select_level(current.getId()).getRecord());
-                        text.setText("Your level:" + (database.select_level(player.getLevel()).getName()));
+                        text.setText("Your level: " + player.getLevel());
                     } else if (!current.isAvailable()) {
                         if (database.select_level(player.getLevel()).getRecord() >= current.getCost()) {
                             current.setAvailable(true);
@@ -99,13 +90,12 @@ public class LevelScreen implements Screen {
                             playButton.setStyle(buttonStyle);
                             player.setLevel(current.getId());
                             label.setText("Need to next: " + current.getGoal() + "\n" + "Your record: " + database.select_level(current.getId()).getRecord());
-                            text.setText("Your level:" + (database.select_level(player.getLevel()).getName()));
+                            text.setText("Your level: " + player.getLevel());
                             try {
                                 game.setScreen(new CutSceneScreen(game, current.getId()));
                             } catch (FileNotFoundException e) {
                                 e.printStackTrace();
                             }
-
                         }
                     }
                 }
@@ -121,30 +111,26 @@ public class LevelScreen implements Screen {
                 }
             });
 
-
-            table.add(playButton).expandX().center();
-            if (current.isAvailable())
-                table.add(label).expandX().center();
+            table.add(playButton).expandX().left();
             if (current.isAvailable()) {
                 table.row();
                 table.add(plotButton).expandX().left();
+                table.row();
+                table.add(label).expandX().left();
             }
-            table.row().height(gameHeight / 3f);
+            table.row();
         }
-
-
-
-
-
+        table.add(new Label("Soon...", styl)).left();
         Gdx.input.setInputProcessor(stage);
         ScrollPane.ScrollPaneStyle style2 = new ScrollPane.ScrollPaneStyle();
         ScrollPane scrollPane = new ScrollPane(table, style2);
         container.background(new TextureRegionDrawable(new Texture(Gdx.files.internal("backgrounds/fon.jpg"))));
-        container.add(scrollPane).height(gameHeight).width(gameWidth);
+        container.add(text).expandX().left().bottom();
+        container.row();
+        container.add(scrollPane).height(gameHeight-text.getHeight()).width(gameWidth);
         container.row();
         container.setBounds(0,0, gameWidth, gameHeight);
         stage.addActor(container);
-
     }
 
     @Override

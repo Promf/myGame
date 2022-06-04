@@ -22,7 +22,7 @@ public class LoadScreen implements Screen {
 
     public LoadScreen (final MyGdxGame game, boolean x){
         this.x=x;
-        music = Gdx.audio.newMusic(Gdx.files.internal("music/old_yellow_bricks.mp3"));
+        music = Gdx.audio.newMusic(Gdx.files.internal("music/the_eternal_sands.ogg"));
 
         this.stage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         this.game = game;

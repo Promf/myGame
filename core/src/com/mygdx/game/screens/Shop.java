@@ -33,45 +33,29 @@ public class Shop implements Screen {
 
 
     public Shop(final MyGdxGame game, final Player player) {
-
-
-
         Gdx.input.setCatchKey(com.badlogic.gdx.Input.Keys.BACK, true);
         this.game = game;
         skins = new CarSkin[database.getCount()+1];
-
-
         for (int i = 0; i < skins.length; i++) {
                 skins[i] = database.select_skin(i);
         }
-
-
-
         int gameHeight = Gdx.graphics.getHeight();
         final int gameWidth = Gdx.graphics.getWidth();
-
         stage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         Gdx.input.setInputProcessor(stage);
-
-
         ScrollPane.ScrollPaneStyle style = new ScrollPane.ScrollPaneStyle();
-
         VisTable container = new VisTable();
         final VisTable table = new VisTable(true);
         container.background(new TextureRegionDrawable(new Texture(Gdx.files.internal("backgrounds/fon.jpg"))));
-
-
         Label.LabelStyle style1 = new Label.LabelStyle(game.font, Color.GOLD);
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
         textButtonStyle.font = game.font;
         Image imageCoin = new Image();
         imageCoin.setDrawable(new TextureRegionDrawable(new Texture(Gdx.files.internal("game_elements/coin.png"))));
-
         final Label coins = new Label(player.coin+"", style1);
         table.add(imageCoin).height(gameWidth /6f).width(gameWidth /6f).align(Align.left);
         table.add(coins).align(Align.left);
         table.row().height(gameHeight /3f);
-
         for (int i = 0; i < skins.length; i++) {
             final int fi = i;
             VisImage image = new VisImage();
@@ -80,13 +64,9 @@ public class Shop implements Screen {
             final VisTextButton useButton;
             Label.LabelStyle labelStyle = new Label.LabelStyle();
             labelStyle.font = game.font;
-
             final VisLabel textName=new VisLabel(skins[fi].getName(), labelStyle);
             final VisLabel textDescription=new VisLabel("Info", labelStyle);
             final boolean[] bool = {false};
-
-
-
             if (skins[i].isBought()){
                 TextButton.TextButtonStyle buttonStyle = new TextButton.TextButtonStyle();
                 buttonStyle.font= game.font;
@@ -96,8 +76,6 @@ public class Shop implements Screen {
                  if (player.getTexturePath().equals(skins[fi].getTexture())){
                      useButton = new VisTextButton("Use");
                      useButton.setStyle(buttonStyle);
-
-
                  }
                  else {
                      useButton = new VisTextButton("Use");
@@ -111,15 +89,12 @@ public class Shop implements Screen {
                 useButton.setStyle(textButtonStyle);
             }
 
-
-
             button.addListener(new ClickListener(){
 
                 public void clicked(InputEvent event, float x, float y){
                     if (!skins[fi].isBought()){
                         if (skins[fi].getPrice()<=player.coin){
                             player.coin-=skins[fi].getPrice();
-
                             skins[fi].setBought(true);
                             button.setText("Purchased");
                             coins.setText(player.coin+"");
@@ -128,9 +103,9 @@ public class Shop implements Screen {
 
                         }
                     }
-
                 }
             });
+
             useButton.addListener(new ClickListener(){
                 public void clicked(InputEvent event, float x, float y){
                     if (skins[fi].isBought()) {
@@ -156,7 +131,6 @@ public class Shop implements Screen {
                     else {
                         textDescription.setText("Info");
                     }
-
                 }
                 });
 
@@ -167,10 +141,10 @@ public class Shop implements Screen {
             table.add(useButton).right().align(Align.center);
             table.row().expandX().colspan(3);
             table.add(textDescription).left().width(gameWidth);
-            table.row().height(gameHeight);
+            table.row();
 
         }
-        table.setDebug(false);
+
         VisScrollPane scrollPane = new VisScrollPane(table, style);
         container.add(scrollPane).width(gameWidth).height(gameHeight);
         container.row();

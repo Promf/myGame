@@ -18,14 +18,12 @@ import java.io.Reader;
 public class CutSceneScreen implements Screen {
 
     private final Stage stage;
-    private final MyGdxGame game;
     private final CutScene scene;
     private final SceneReader reader;
     private final CutScenePlan plan;
 
     public CutSceneScreen(MyGdxGame game, int id) throws FileNotFoundException {
         this.stage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
-        this.game = game;
         reader=new SceneReader(game);
         Gson gson = new Gson();
         Reader file = Gdx.files.internal("scenes/cut_scenes.json").reader();

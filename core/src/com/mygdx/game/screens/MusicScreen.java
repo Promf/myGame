@@ -32,9 +32,9 @@ public class MusicScreen implements Screen {
         Table table = new Table();
         Table container = new Table();
 
-        Song song1 = new Song("music/old_yellow_bricks.mp3", true, "Old Yellow bricks", "Artic Monkeys");
-        Song song2 = new Song("music/breaking_the_habits.mp3", false, "Breaking the habits", "Linkin park");
-        Song song3 = new Song("music/paint_it_black.mp3", false, "Pait it nlack", "Nlack EE");
+        Song song1 = new Song("music/the_eternal_sands.ogg", true, "Sands", "Unknown");
+        Song song2 = new Song("music/together.mp3", false, "Together", "Ataman");
+        Song song3 = new Song("music/music.ogg", false, "Dancing", "Nlack");
         Song[] music = new Song[]{song1, song2, song3};
 
         for (final Song current : music) {
@@ -74,7 +74,7 @@ public class MusicScreen implements Screen {
             table.row();
             table.add(playButton).left().top();
             table.add(stopButton).left();
-            table.row().height(gameHeight /4f);
+            table.row();
 
         }
 

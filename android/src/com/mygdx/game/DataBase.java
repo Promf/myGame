@@ -12,7 +12,7 @@ import com.mygdx.game.cars.Player;
 
 public class DataBase implements Database {
     private static final String DATABASE_NAME = "game_data.db";
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 11;
     private static final String TABLE_NAME = "playerInfo";
     private static final String TABLE2_NAME = "Levels";
     private static final String TABLE_SKINS_NAME = "Skins";
@@ -186,7 +186,7 @@ public class DataBase implements Database {
         return arr;
     }*/
     public int getCount(){
-        Cursor mCursor = mDataBase.rawQuery("select * from "+TABLE_SKINS_NAME, null);
+        @SuppressLint("Recycle") Cursor mCursor = mDataBase.rawQuery("select * from "+TABLE_SKINS_NAME, null);
         return mCursor.getColumnCount();
     }
 
